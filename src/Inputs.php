@@ -69,14 +69,15 @@ class Inputs
         ];
 
         register_shutdown_function(function () {
-            if (!isset($_RES)) return;
+            if (!isset($GLOBALS['_RES'])) return;
 
-            http_response_code($_RES['status_code'] ?? 200);
-            foreach ($_RES['headers'] ?? [] as $k => $v) {
+            $res = $GLOBALS['_RES'];
+            http_response_code($res['status_code'] ?? 200);
+            foreach ($res['headers'] ?? [] as $k => $v) {
                 header("$k: $v");
             }
-            if ($_RES['data'] !== null) {
-                echo json_encode($_RES['data']);
+            if ($res['data'] !== null) {
+                echo json_encode($res['data']);
             }
         });
 
