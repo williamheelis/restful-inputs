@@ -1,5 +1,5 @@
 {
-  "name": "restful-inputs",
+  "name": "williamheelis/restful-inputs",
   "description": "Simple RESTful globals: $_PUT, $_PATCH, $_DELETE, $_HEADER, $_JSON, $_PATH, $_RES for PHP APIs",
   "type": "library",
   "license": "MIT",
