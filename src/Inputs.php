@@ -3,7 +3,14 @@ namespace Restful;
 
 class Inputs
 {
-    private static $trigger = self::bootstrap();
+    private static bool $booted = false;
+
+    public static function init(): void
+    {
+        if (self::$booted) return;
+        self::$booted = true;
+        self::bootstrap();
+    }
 
     public static function setPath(string $mask): void
     {
@@ -30,8 +37,9 @@ class Inputs
         $GLOBALS['_PATH'] = $params;
     }
 
-    private static function bootstrap(): bool
+    private static function bootstrap(): void
     {
+        // Headers
         $headers = function_exists('getallheaders') ? getallheaders() : [];
         if (!$headers) {
             foreach ($_SERVER as $key => $value) {
@@ -43,6 +51,7 @@ class Inputs
         }
         $GLOBALS['_HEADER'] = $headers;
 
+        // Body
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $input = file_get_contents('php://input');
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
@@ -69,18 +78,18 @@ class Inputs
         ];
 
         register_shutdown_function(function () {
-            if (!isset($GLOBALS['_RES'])) return;
+            error_log("shutdown fired");
+            $res = $GLOBALS['_RES'] ?? null;
+            if (!$res) return;
 
-            $res = $GLOBALS['_RES'];
             http_response_code($res['status_code'] ?? 200);
             foreach ($res['headers'] ?? [] as $k => $v) {
                 header("$k: $v");
             }
+
             if ($res['data'] !== null) {
-                echo json_encode($res['data']);
+                echo is_string($res['data']) ? $res['data'] : json_encode($res['data']);
             }
         });
-
-        return true;
     }
 }
