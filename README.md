@@ -38,7 +38,7 @@ composer require restful-inputs
 
 ```php
 use Restful\Inputs;
-
+Inputs::init();
 Inputs::setPath('api/something/{uid}'); //only needed if you actually have a path with params - and it assumes you're in an index.php
 
 $uid = $_PATH['uid'] ?? null;
@@ -54,6 +54,9 @@ $_RES['status_code'] = 200;
 Access all request headers:
 
 ```php
+use Restful\Inputs;
+Inputs::init();
+
 $auth = $_HEADER['Authorization'] ?? null;
 $userAgent = $_HEADER['User-Agent'] ?? null;
 
@@ -77,6 +80,9 @@ Example `PUT` `/api/profile` with body:
 ```
 
 ```php
+use Restful\Inputs;
+Inputs::init();
+
 if (isset($_PUT)) {
     $username = $_PUT['username'] ?? null;
     $email = $_PUT['email'] ?? null;
@@ -88,6 +94,9 @@ if (isset($_PUT)) {
 it is safe to test/bail on error like this `isset($_PUT)`
 
 ```php
+use Restful\Inputs;
+Inputs::init();
+
 if (!isset($_PUT)) {
     $_RES['status_code'] = 401;
     $_RES['data'] = ['error' => 'not _PUT'];
@@ -100,6 +109,9 @@ if (!isset($_PUT)) {
 Always available if request has `Content-Type: application/json.`
 
 ```php
+use Restful\Inputs;
+Inputs::init();
+
 $name = $_JSON['name'] ?? 'guest';
 
 if (!$name) {

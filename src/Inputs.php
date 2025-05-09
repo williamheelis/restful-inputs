@@ -78,18 +78,19 @@ class Inputs
         ];
 
         register_shutdown_function(function () {
-            error_log("shutdown fired");
             $res = $GLOBALS['_RES'] ?? null;
             if (!$res) return;
 
             http_response_code($res['status_code'] ?? 200);
+
             foreach ($res['headers'] ?? [] as $k => $v) {
                 header("$k: $v");
             }
 
-            if ($res['data'] !== null) {
-                echo is_string($res['data']) ? $res['data'] : json_encode($res['data']);
-            }
+            $response = ['data' => $res['data'] ?? null];
+
+            echo json_encode($response);
         });
+
     }
 }
