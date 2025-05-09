@@ -95,7 +95,7 @@ if (!isset($_PUT)) {
 }
 ```
 
-## \_JSON
+## $\_JSON
 
 Always available if request has `Content-Type: application/json.`
 
