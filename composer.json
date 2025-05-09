@@ -1,11 +1,11 @@
 {
-  "name": "yourname/restful-inputs",
+  "name": "restful-inputs",
   "description": "Simple RESTful globals: $_PUT, $_PATCH, $_DELETE, $_HEADER, $_JSON, $_PATH, $_RES for PHP APIs",
   "type": "library",
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "Restful\\": "src/"
+      "Restful\\\\": "src/"
     }
   },
   "require": {
