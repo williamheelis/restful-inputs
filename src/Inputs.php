@@ -99,6 +99,8 @@ class Inputs
 
             $response = ['data' => $res['data'] ?? null];
 
+            $response = ['error' => $res['error'] ?? null];
+
             echo json_encode($response);
         });
 
