@@ -37,6 +37,16 @@ class Inputs
         $GLOBALS['_PATH'] = $params;
     }
 
+    public static function method(): string
+    {
+        return $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    }
+
+    public static function is(string $method): bool
+    {
+        return strtoupper($method) === ($_SERVER['REQUEST_METHOD'] ?? 'GET');
+    }
+
     private static function bootstrap(): void
     {
         // Headers
