@@ -1,6 +1,6 @@
 {
   "name": "williamheelis/restful-inputs",
-  "description": "Simple RESTful globals: $_PUT, $_PATCH, $_DELETE, $_HEADER, $_JSON, $_PATH, $_RES for PHP APIs",
+  "description": "Simple RESTful globals: $_PUT, $_PATCH, $_DELETE, $_HEADER, $_JSON, $_PATH, $_RES for PHP APIs. Basically this is an extension of the logic PHP probably intended when they introduced _GET and _POST and this package simply extends it and is useful shorthand option for RESTful api end points as a result. The focus was on inline brevity, and assumes plenty of `/api/someItem/index.php` -> `PATCH::/api/someItem/` structure. (i.e lots of dirs with one index.php each!)",
   "type": "library",
   "license": "MIT",
   "autoload": {

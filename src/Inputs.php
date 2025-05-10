@@ -42,10 +42,18 @@ class Inputs
         return $_SERVER['REQUEST_METHOD'] ?? 'GET';
     }
 
-    public static function is(string $method): bool
+    public static function is(string $type): bool
     {
-        return strtoupper($method) === ($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+
+        if (strtoupper($type) === 'JSON') {
+            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+            return stripos($contentType, 'application/json') !== false;
+        }
+
+        return strtoupper($type) === $method;
     }
+
 
     private static function bootstrap(): void
     {

@@ -3,22 +3,32 @@
 Automatically sets useful REST globals in plain PHP:
 
 - `$_HEADER`: request headers
-- `$_PUT`, `$_PATCH`, `$_DELETE`: request body data (if `isset($_PUT)` it means to was sent PUT)
-- `$_JSON`: parsed JSON body (if `isset($_JSON)` it means to was sent JSON)
+- `$_PUT`, `$_PATCH`, `$_DELETE`: request body data (if `Inputs::is('PUT')` it means to was sent PUT)
+- `$_JSON`: parsed JSON body (if `Inputs::is('JSON')` it means to was sent JSON)
 - `$_PATH`: parsed path parameters (EG: a input mask of `Inputs::setPath('api/someItem/{uid}')` will make `$_PATH['uid']` available)
 - `$_RES`: response wrapper sent automatically on shutdown - use ['data'], ['status_code'] and ['headers']
 
 ## TLDR; Auto Behaviour Summary
 
-| Global     | When Available                          |
-| ---------- | --------------------------------------- |
-| `$_HEADER` | Always — all request headers            |
-| `$_JSON`   | Always — if body is JSON                |
-| `$_PUT`    | Only on PUT request                     |
-| `$_PATCH`  | Only on PATCH request                   |
-| `$_DELETE` | Only on DELETE request                  |
-| `$_PATH`   | After `Inputs::setPath()` or fallback   |
-| `$_RES`    | Always — sent automatically at shutdown |
+| Request    | When Available                        |
+| ---------- | ------------------------------------- |
+| `$_HEADER` | Always — all request headers          |
+| `$_JSON`   | Only if body is JSON                  |
+| `$_PUT`    | Only on PUT request                   |
+| `$_PATCH`  | Only on PATCH request                 |
+| `$_DELETE` | Only on DELETE request                |
+| `$_PATH`   | After `Inputs::setPath()` or fallback |
+
+| RESponse |                                         |
+| -------- | --------------------------------------- |
+| `$_RES`  | Always — sent automatically at shutdown |
+
+| \_RES                 |                                                             |
+| --------------------- | ----------------------------------------------------------- |
+| $\_RES['status_code'] | number                                                      |
+| $\_RES['error']       | string                                                      |
+| $\_RES['data']        | any                                                         |
+| $\_RES['headers']     | EG: $\_RES['headers']['Content-Type'] = 'application/json'; |
 
 ## `$_RES` WARNING
 
@@ -83,7 +93,7 @@ Example `PUT` `/api/profile` with body:
 use Restful\Inputs;
 Inputs::init();
 
-if (isset($_PUT)) {
+if (Inputs::is('PUT')) {
     $username = $_PUT['username'] ?? null;
     $email = $_PUT['email'] ?? null;
 
@@ -91,15 +101,16 @@ if (isset($_PUT)) {
 }
 ```
 
-it is safe to test/bail on error like this `isset($_PUT)`
+it is safe to test/bail on error like this `if (Inputs::is('PUT')){`
 
 ```php
 use Restful\Inputs;
 Inputs::init();
 
-if (!isset($_PUT)) {
+if (!Inputs::is('PUT')) {
     $_RES['status_code'] = 401;
     $_RES['data'] = ['error' => 'not _PUT'];
+    //or $_RES['error'] = 'Name is required';
     exit;
 }
 ```
@@ -117,12 +128,14 @@ $name = $_JSON['name'] ?? 'guest';
 if (!$name) {
     $_RES['status_code'] = 400;
     $_RES['data'] = ['error' => 'Name is required'];
+    //or $_RES['error'] = 'Name is required';
+    exit;
 }
 ```
 
 Even for POST, PATCH, etc., $\_JSON will work as long as the input is JSON.
 
-it is safe to test `isset($_JSON)`
+it is safe to test `if (Inputs::is('JSON')){`
 
 ## $\_RES (Auto-Sent Response)
 
