@@ -105,12 +105,12 @@ class Inputs
                 header("$k: $v");
             }
 
-            $response = ['data' => $res['data'] ?? null];
-
-            $response = ['error' => $res['error'] ?? null];
+            $response = [
+                'data' => $res['data'] ?? null,
+                'error' => $res['error'] ?? null
+            ];
 
             echo json_encode($response);
         });
-
     }
 }
