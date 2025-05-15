@@ -14,28 +14,25 @@ class Inputs
 
     public static function setPath(string $mask): void
     {
-        $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
-        $baseDir = dirname($scriptName);
-        $cleanPath = str_replace($baseDir, '', $requestUri);
-        $cleanPath = strtok($cleanPath, '?');
-        $segments = array_values(array_filter(explode('/', trim($cleanPath, '/'))));
-        $GLOBALS['_PATH'] = $segments;
+        $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $segments = array_values(array_filter(explode('/', trim($uriPath, '/'))));
+        $patternSegments = array_values(array_filter(explode('/', trim($mask, '/'))));
 
-        $patternSegments = explode('/', trim($mask, '/'));
         if (count($patternSegments) !== count($segments)) return;
 
         $params = [];
-        foreach ($patternSegments as $i => $seg) {
-            if (preg_match('/^{(.+)}$/', $seg, $m)) {
+        foreach ($patternSegments as $i => $pattern) {
+            if (preg_match('/^{(.+)}$/', $pattern, $m)) {
                 $params[$m[1]] = $segments[$i];
-            } elseif ($seg !== $segments[$i]) {
+            } elseif ($pattern !== $segments[$i]) {
                 return;
             }
         }
 
         $GLOBALS['_PATH'] = $params;
     }
+
+
 
     public static function method(): string
     {
