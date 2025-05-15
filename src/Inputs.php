@@ -115,7 +115,7 @@ class Inputs
                 'error' => $res['error'] ?? null
             ];
 
-            foreach ($extendedKeys as $key) {
+            foreach (\Restful\Inputs::$extendedKeys as $key) {
                 if (isset($res[$key])) {
                     $response[$key] = $res[$key];
                 }
