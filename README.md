@@ -30,6 +30,48 @@ Automatically sets useful REST globals in plain PHP:
 | $\_RES['data']        | any                                                         |
 | $\_RES['headers']     | EG: $\_RES['headers']['Content-Type'] = 'application/json'; |
 
+## don't mix echo
+
+If you're using `$_RES` avoid using `echo` (even `echo json_encode("me");` will make it go weird) and don't use the `header` command -- it can give odd results)
+
+## `$_RES` DEFAULTS are only ['error'] and ['data']
+
+Out of the box this
+
+```php
+$_RES['debug'] = "bob"
+```
+
+will return this
+
+```json
+{
+  "data": null,
+  "error": null
+}
+```
+
+If you want to extend (EG: to add `debug`) you need to tell it to by using `Inputs::extend('debug');`. This is by design.
+
+EG: use this
+
+```php
+Inputs::extend('debug');
+$_RES['debug'] = "bob"
+```
+
+to get
+
+```json
+{
+  "data": null,
+  "debug": null,
+  "error": null
+}
+```
+
+You will have to have added the line `Inputs::extend('debug');` you can then use it
+
 ## `$_RES` WARNING
 
 If you don't call `exit;` and the script continues running (e.g., later logic or another `$_RES['data']` overwrite), the final values of `$_RES` at the end of execution are what gets sent.

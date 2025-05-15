@@ -4,6 +4,7 @@ namespace Restful;
 class Inputs
 {
     private static bool $booted = false;
+    private static array $extendedKeys = [];
 
     public static function init(): void
     {
@@ -32,7 +33,14 @@ class Inputs
         $GLOBALS['_PATH'] = $params;
     }
 
-
+    public static function extend(string ...$keys): void
+    {
+        foreach ($keys as $key) {
+            if (!in_array($key, self::$extendedKeys, true)) {
+                self::$extendedKeys[] = $key;
+            }
+        }
+    }
 
     public static function method(): string
     {
