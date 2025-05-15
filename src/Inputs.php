@@ -100,7 +100,7 @@ class Inputs
             'data' => null
         ];
 
-        register_shutdown_function(function () {
+        register_shutdown_function(function () use ($extendedKeys) {
             $res = $GLOBALS['_RES'] ?? null;
             if (!$res) return;
 
@@ -114,6 +114,12 @@ class Inputs
                 'data' => $res['data'] ?? null,
                 'error' => $res['error'] ?? null
             ];
+
+            foreach ($extendedKeys as $key) {
+                if (isset($res[$key])) {
+                    $response[$key] = $res[$key];
+                }
+            }
 
             echo json_encode($response);
         });
