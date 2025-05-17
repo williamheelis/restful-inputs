@@ -100,7 +100,7 @@ class Inputs
             'data' => null
         ];
 
-        register_shutdown_function(function () use ($extendedKeys) {
+        register_shutdown_function(function () {
             $res = $GLOBALS['_RES'] ?? null;
             if (!$res) return;
 
@@ -115,7 +115,7 @@ class Inputs
                 'error' => $res['error'] ?? null
             ];
 
-            foreach (\Restful\Inputs::$extendedKeys as $key) {
+            if (empty(\Restful\Inputs::$extendedKeys)) foreach (\Restful\Inputs::$extendedKeys as $key) {
                 if (isset($res[$key])) {
                     $response[$key] = $res[$key];
                 }
